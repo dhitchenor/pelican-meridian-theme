@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var t = localStorage.getItem('theme');
+  if (t !== 'light' && t !== 'dark') { t = 'dark'; }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+  <meta charset="utf-8">
+  {% block metadesk %}<meta name="description" content="{{ METADATA }}">{% endblock %}
+  {% block author %}<meta name="author" content="{{ AUTHOR }}">{% endblock %}
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="{{ SITEURL }}/theme/css/style.css" rel="stylesheet" type="text/css" />
+  {% if FAVICON %}
+  {% set favicon_type = "image/x-icon" if FAVICON.endswith(".ico") else "image/svg+xml" if FAVICON.endswith(".svg") else "image/png" %}
+  <link rel="icon" href="{{ SITEURL }}/{{ FAVICON }}" type="{{ favicon_type }}">
+  <link rel="shortcut icon" href="{{ SITEURL }}/{{ FAVICON }}" type="{{ favicon_type }}">
+  {% endif %}
+  <link href="{{ SITEURL }}/{{ FEED }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} ATOM Feed" />
+{% if FEED_RSS %}
+  <link href="{{ SITEURL }}/{{ FEED_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
+{% endif %}
+  {% include '_includes/extra-head.html' ignore missing %}
+</head>
+<body>
+<div id="outer-wrapper">
+{% include '_includes/site-header.html' %}
+  <div id="layout">
+    {% include '_includes/sidebar.html' %}
+    <div id="main">
+    {% block content %}
+    {% endblock %}
+    </div>
+  </div>
+</div>
+{% include '_includes/footer.html' %}
+<script src="{{ SITEURL }}/theme/js/theme.js"></script>
+{% include '_includes/extra-body.html' ignore missing %}
+</body>
+</html>

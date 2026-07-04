@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block windowtitle %}{{ page.title }}{% endblock %}
+{% block title %}{{ page.title }} | {{ SITENAME }}{% endblock %}
+{% block content %}
+<article class="post-full">
+<h2><a href="{{ SITEURL }}/{{ page.url }}">{{ page.title }}</a></h2>
+<div class="post-content">
+{{ page.content }}
+</div>
+{% if PDF_PROCESSOR %}
+<p class="pdf-link"><a href="{{ SITEURL }}/pdf/{{ page.slug }}.pdf">get the pdf</a></p>
+{% endif %}
+</article>
+{% endblock %}

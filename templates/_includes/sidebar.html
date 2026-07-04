@@ -1,0 +1,39 @@
+<aside id="sidebar">
+  <button id="sidebar-close" type="button" aria-label="Close menu">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+
+  <div class="sidebar-scroll">
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a href="{{ SITEURL }}/">Home</a></li>
+        <li><a href="{{ SITEURL }}/posts/">Posts</a></li>
+        {% include '_includes/pages.html' %}
+      </ul>
+    </nav>
+
+    {% if FEATURED_PROJECTS %}
+    {% import '_includes/links.html' as links with context %}
+    <nav class="sidebar-nav sidebar-pinned">
+      <p class="sidebar-heading">Pinned</p>
+      <ul>
+        {% for project in FEATURED_PROJECTS %}
+        <li class="pinned-item">
+          <a href="{{ links.resolve_url(project.url) }}">
+            <span class="pinned-name">{{ project.name }}</span>
+            {% if project.desc %}<span class="pinned-desc">{{ project.desc }}</span>{% endif %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% if SOCIAL %}
+    <nav class="sidebar-nav sidebar-social">
+      <p class="sidebar-heading">Elsewhere</p>
+      {% include '_includes/social.html' %}
+    </nav>
+    {% endif %}
+  </div>
+</aside>

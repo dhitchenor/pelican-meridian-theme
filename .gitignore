@@ -1,0 +1,15 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Python / Pelican build artifacts (in case someone tests from inside this repo)
+__pycache__/
+*.pyc
+output/
+cache/
+.cache/
+
+# Node, in case anyone adds tooling later
+node_modules/

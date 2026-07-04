@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block content %}
+<section class="preface">
+    <header class="preface-intro">
+        {% if PREFACE_TAGLINE %}
+        <p class="preface-tagline">{{ PREFACE_TAGLINE }}</p>
+        {% endif %} {% if PREFACE_BLURB %}
+        <p class="preface-blurb">{{ PREFACE_BLURB }}</p>
+        {% endif %} {% if PREFACE_NOW %}
+        <div class="preface-now">
+            <span class="preface-now-label">Now</span>
+            <p>{{ PREFACE_NOW }}</p>
+        </div>
+        {% endif %}
+    </header>
+
+    {% if PREFACE_SKILLS %}
+    <div class="preface-section">
+        <h2 class="preface-heading">Stack</h2>
+        <div class="skill-list">
+            {% for skill in PREFACE_SKILLS %}<span class="skill-pill"
+                >{{ skill }}</span
+            >{% endfor %}
+        </div>
+    </div>
+    {% endif %} {% if FEATURED_PROJECTS %} {% import '_includes/links.html' as
+    links with context %}
+    <div class="preface-section">
+        <h2 class="preface-heading">Selected projects</h2>
+        <div class="preface-projects">
+            {% for project in FEATURED_PROJECTS %}
+            <a
+                class="preface-project-card"
+                href="{{ links.resolve_url(project.url) }}"
+            >
+                <span class="preface-project-name">{{ project.name }}</span>
+                {% if project.desc %}<span class="preface-project-desc"
+                    >{{ project.desc }}</span
+                >{% endif %} {% if project.tags %}
+                <span class="tag-list">
+                    {% for t in project.tags %}<span
+                        class="tag-pill tag-pill-small"
+                        >{{ t }}</span
+                    >{% endfor %}
+                </span>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="preface-section preface-cta">
+        <a class="page-link" href="{{ SITEURL }}/posts/"
+            >Read the blog &rarr;</a
+        >
+    </div>
+</section>
+{% endblock content %}

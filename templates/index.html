@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Posts | {{ SITENAME }}{% endblock %}
+{% block content %}
+<h2 class="listing-heading">Posts</h2>
+{% if articles %}
+{% for article in articles_page.object_list %}
+<article class="post-card">
+  <h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
+  <div class="post-meta">
+    <span class="post-date">{{ article.locale_date }}</span>
+    {% if article.category %}<a class="category-pill" href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>{% endif %}
+    {% if article.update %}<span class="post-updated">updated {{ article.update }}</span>{% endif %}
+  </div>
+  <p class="post-summary">{{ article.summary|striptags }}</p>
+  {% if article.tags %}
+  <div class="tag-list">
+    {% for tag in article.tags %}<a class="tag-pill" href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>{% endfor %}
+  </div>
+  {% endif %}
+</article>
+{% endfor %}
+{% endif %}
+{% include "_includes/pagination.html" %}
+{% endblock content %}

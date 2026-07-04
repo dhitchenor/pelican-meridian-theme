@@ -1,0 +1,6 @@
+{% import '_includes/icons.html' as icons %}
+<ul>
+  {% for name, link in SOCIAL %}
+    <li><a href="{{ link }}">{{ icons.social_icon(name) }}<span>{{ name }}</span></a></li>
+  {% endfor %}
+</ul>
