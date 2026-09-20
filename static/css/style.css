@@ -20,6 +20,7 @@ html[data-theme="dark"] {
     --accent: #5dcaa5;
     --accent-text: #0e3529;
     --accent-tint: #16332b;
+    --accent2: #5d9aca;
     --link: #7fd9c4;
     --header-bg: #0f1114;
 }
@@ -37,6 +38,7 @@ html[data-theme="light"] {
     --accent: #c1440e;
     --accent-text: #ffffff;
     --accent-tint: #fdeee6;
+    --accent2: #a8791f;
     --link: #c1440e;
     --header-bg: #ffffff;
 }
@@ -337,6 +339,24 @@ html[data-theme="light"] #theme-toggle .icon-sun {
 .preface-now p {
     margin: 0;
 }
+.preface-later {
+    margin-top: 0.6em;
+    border-left-style: dashed;
+}
+.preface-projects-pinned {
+    border-left: 3px solid var(--accent2);
+    padding: 0.2em 0 0.2em 0.9em;
+    margin-top: 1.2em;
+}
+.preface-projects-pinned-label {
+    display: block;
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 0 0 0.6em;
+}
 
 .preface-section {
     margin-bottom: 2.5em;
@@ -364,6 +384,11 @@ html[data-theme="light"] #theme-toggle .icon-sun {
     color: var(--text-primary);
     font-size: 0.85em;
     font-weight: 500;
+}
+a.skill-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
 }
 
 .preface-projects {

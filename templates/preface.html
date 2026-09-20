@@ -7,27 +7,79 @@
         <p class="preface-blurb">{{ PREFACE_BLURB }}</p>
         {% endif %} {% if PREFACE_NOW %}
         <div class="preface-now">
-            <span class="preface-now-label">Now</span>
+            <span class="preface-now-label">{{ PREFACE_NOW_LABEL|default('Now') }}</span>
             <p>{{ PREFACE_NOW }}</p>
         </div>
+        {% endif %} {% if PREFACE_LATER %}
+        <div class="preface-now preface-later">
+            <span class="preface-now-label">{{ PREFACE_LATER_LABEL|default('Later') }}</span>
+            <p>{{ PREFACE_LATER }}</p>
+        </div>
+        {% endif %} {% if PREFACE_PROJECTS %} {% import '_includes/links.html'
+        as links with context %}
+        <div class="preface-projects-pinned">
+            <p class="preface-projects-pinned-label">{{ PREFACE_PROJECTS_LABEL|default('Previous projects') }}</p>
+            <div
+                class="skill-list"
+                id="preface-projects-list"
+                data-max-lines="{{ PREFACE_PROJECTS_LINES|default(2) }}"
+            >
+                {% for name, url in PREFACE_PROJECTS %}<a
+                    class="skill-pill"
+                    href="{{ links.resolve_url(url) }}"
+                    >{{ name }}</a
+                >{% endfor %}
+            </div>
+        </div>
+        <script>
+            (function () {
+                var list = document.getElementById("preface-projects-list");
+                if (!list) return;
+                var maxLines = parseInt(list.getAttribute("data-max-lines"), 10) || 2;
+                function clamp() {
+                    list.style.maxHeight = "";
+                    list.style.overflow = "";
+                    var items = Array.prototype.slice.call(list.children);
+                    if (!items.length) return;
+                    var tops = [];
+                    items.forEach(function (el) {
+                        var t = el.offsetTop;
+                        if (tops.indexOf(t) === -1) tops.push(t);
+                    });
+                    tops.sort(function (a, b) {
+                        return a - b;
+                    });
+                    if (tops.length > maxLines) {
+                        list.style.maxHeight = tops[maxLines] - tops[0] + "px";
+                        list.style.overflow = "hidden";
+                    }
+                }
+                clamp();
+                var resizeTimer;
+                window.addEventListener("resize", function () {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(clamp, 150);
+                });
+            })();
+        </script>
         {% endif %}
     </header>
 
     {% if PREFACE_SKILLS %}
     <div class="preface-section">
-        <h2 class="preface-heading">Stack</h2>
+        <h2 class="preface-heading">Skills</h2>
         <div class="skill-list">
             {% for skill in PREFACE_SKILLS %}<span class="skill-pill"
                 >{{ skill }}</span
             >{% endfor %}
         </div>
     </div>
-    {% endif %} {% if FEATURED_PROJECTS %} {% import '_includes/links.html' as
+    {% endif %} {% if featured_items %} {% import '_includes/links.html' as
     links with context %}
     <div class="preface-section">
-        <h2 class="preface-heading">Selected projects</h2>
+        <h2 class="preface-heading">Featured posts</h2>
         <div class="preface-projects">
-            {% for project in FEATURED_PROJECTS %}
+            {% for project in featured_items %}
             <a
                 class="preface-project-card"
                 href="{{ links.resolve_url(project.url) }}"

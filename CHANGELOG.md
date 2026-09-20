@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.1 - Featured posts, preface projects, and copyright year
+- FEATURED_PROJECTS renamed to FEATURED_POSTS (it features blog posts, not arbitrary projects — PREFACE_PROJECTS below is the new home for actual past projects). If FEATURED_POSTS is left empty, the theme auto-features the most recent posts instead (DEFAULT_FEATURED_POSTS for how many, DEFAULT_FEATURED_POSTS_ORDER for newest-first vs. oldest-first display of that same selection). The preface homepage's "Selected projects" heading is now "Featured posts" to match.
+- Fixed a bug where the sidebar's "Pinned" section only ever showed an explicitly-set FEATURED_PROJECTS/FEATURED_POSTS list and never benefited from the auto-fallback above, even though the preface homepage's cards already did — both now stay consistent regardless of which list is empty.
+- Preface homepage's "Stack" heading renamed to "Skills".
+- PREFACE_LATER setting — an optional "Later" note shown directly under "Now" on the preface homepage, for what's planned next rather than in progress. Same layout as "Now" with a dashed accent border to mark it as upcoming. Omitted entirely if unset.
+- PREFACE_PROJECTS setting (named to match the other PREFACE_* settings) — a row of linkable pills shown directly under the "Now" note on the preface homepage, for past projects distinct from what's currently being worked on. Uses its own accent color (--accent2, blue in dark mode / amber in light mode) so it reads as related to but distinct from "Now" and from category badges, which both use the theme's main --accent. PREFACE_PROJECTS_LINES (default 2) caps how many rows of pills show before the rest are clipped, measured against actual rendered pill positions (not a hardcoded height) so it stays correct at any window width. Omitted entirely if PREFACE_PROJECTS is unset.
+- PREFACE_NOW_LABEL, PREFACE_LATER_LABEL and PREFACE_PROJECTS_LABEL override the "Now" and "Preface projects" heading text, for sites that want different wording (e.g. "Currently", "Past work") without touching the theme.
+- COPYRIGHT_YEAR accepts a plain year, a range ("2026 - 2027"), or a list of years ("2026, 2027") — shown in the footer exactly as given.
+
+
 ## 1.0.0 — initial fork
 
 `meridian` is forked from [redVi/storm](https://github.com/redVi/storm)

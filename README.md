@@ -7,7 +7,7 @@ project cards, category + tag pills, and code syntax highlighting for
 both themes.
 
 The original theme required Ruby + Sass + Compass to build its CSS. That
-whole toolchain has been dropped — `static/css/style.css` is plain,
+whole toolchain has been dropped; `static/css/style.css` is plain,
 hand-written CSS. Drop the theme in and go; nothing to compile.
 
 MIT licensed. This fork's own license is in [LICENSE](LICENSE); Storm's
@@ -83,7 +83,7 @@ EXTRA_PATH_METADATA = {
 # Pelican renders from settings, so both entries below are required:
 DIRECT_TEMPLATES = ('index', 'preface', 'about', 'archives', '404')
 PREFACE_URL = ''
-PREFACE_SAVE_AS = 'index.html'      # preface.html template becomes the homepage
+PREFACE_SAVE_AS = 'index.html'     # preface.html template becomes the homepage
 INDEX_URL = 'posts/'
 INDEX_SAVE_AS = 'posts/index.html' # index.html template (post list) moves here
 ARCHIVES_URL = 'archives/'
@@ -97,21 +97,42 @@ PREFACE_SKILLS = (
     'Docker', 'FreeCAD', 'Linux (Debian, openSUSE)', 'USB protocols',
 )
 PREFACE_NOW = 'A fresh new item/build/project, that you are working on'
+# PREFACE_NOW_LABEL = 'Now'  # optional -- override the "Now" heading text
+
+PREFACE_LATER = 'Something you plan to work on next'
+# PREFACE_LATER_LABEL = 'Later'  # optional -- override the "Later" heading text
+
+# Previous projects; a row of linkable pills shown right under "Now"
+# (or under "Later", if set), for things you've built before rather
+# than what's current. Wraps onto multiple rows if you list a lot;
+# only the first PREFACE_PROJECTS_LINES rows show, the rest are clipped
+# (see "Preface projects" below).
+PREFACE_PROJECTS = (
+    ('My Old Project', 'https://github.com/yourname/my-old-project'),
+)
+PREFACE_PROJECTS_LINES = 2
+# PREFACE_PROJECTS_LABEL = 'Previous projects'  # optional -- override the heading text
 
 # Nav menu (top of sidebar). Home and Posts are hardcoded into the
-# sidebar template and always shown automatically — add anything else here.
+# sidebar template and always shown automatically; add anything else here.
 DISPLAY_PAGES_ON_MENU = True
 MENUITEMS = (('About', 'about/'),)
 
 # Social links in header + sidebar
 SOCIAL = (('github', 'https://github.com/yourname'),)
 
-# Footer copyright year (omitted if not set)
-COPYRIGHT_YEAR = 2026
+# Footer copyright year (omitted if not set). A plain year, a range, or
+# a list of years all work; the value is shown exactly as given:
+COPYRIGHT_YEAR = 2026            # -> "2026"
+# COPYRIGHT_YEAR = "2026 - 2027" # -> "2026 - 2027"
+# COPYRIGHT_YEAR = "2026, 2027"  # -> "2026, 2027"
 
-# Pinned/featured projects — shown compactly in the sidebar on every page,
-# and as full cards under "Selected projects" on the preface homepage
-FEATURED_PROJECTS = (
+# Featured posts; shown compactly in the sidebar on every page, and as
+# full cards under "Featured posts" on the preface homepage.
+# If FEATURED_POSTS is left empty (or unset), the theme falls back to
+# auto-featuring your most recent posts instead; see "Featured posts"
+# below for DEFAULT_FEATURED_POSTS / DEFAULT_FEATURED_POSTS_ORDER.
+FEATURED_POSTS = (
     {
         'name': 'My First Project',
         'url': '/my-first-project-write-up.html',
@@ -127,12 +148,60 @@ FEATURED_PROJECTS = (
 )
 ```
 
+## Preface projects
+
+`PREFACE_PROJECTS` is a simple list of `(name, url)` pairs, shown as
+linkable pills directly under the "Now" note on the preface homepage;
+a compact way to point at things you've built before, distinct from
+what you're currently working on. Styled with its own accent color
+(`--accent2` in `static/css/style.css`, blue in dark mode / amber in
+light mode) so it reads as related to but distinct from "Now" and from
+category badges, both of which use the theme's main `--accent`.
+Omitted entirely if unset.
+
+`PREFACE_PROJECTS_LINES` (default `2`) caps how many rows of pills show
+before the rest are clipped. This is measured against the actual
+rendered pill positions in the browser (not a hardcoded height), so it
+stays correct regardless of how many projects you list or how narrow
+the window is, and re-checks on resize.
+
+This, "Now" and "Later" can all be relabeled if the default wording
+doesn't fit how you'd describe them; `PREFACE_NOW_LABEL`,
+`PREFACE_LATER_LABEL` and `PREFACE_PROJECTS_LABEL` override the
+displayed text (e.g. "Currently", "Next up" or "Past work") without
+changing anything else about how the sections work.
+
+## Featured posts
+
+`FEATURED_POSTS` is a manual, hand-curated list; set it and it's
+used exactly as written, in that order, on both the sidebar's "Pinned"
+section and the preface homepage's "Featured posts" cards.
+
+Leave it empty (or unset entirely) and the theme auto-features your
+most recent posts instead, pulling `name`/`url`/`tags` straight from
+each article and building `desc` from its summary (stripped of HTML,
+truncated to ~140 characters):
+
+```python
+DEFAULT_FEATURED_POSTS = 3              # how many recent posts to auto-feature
+DEFAULT_FEATURED_POSTS_ORDER = 'desc'   # 'desc' (default, newest first) or 'asc'
+```
+
+`DEFAULT_FEATURED_POSTS_ORDER` only changes the *display* order of the
+selected posts; the selection itself is always the true N most recent
+posts either way; ascending just shows that same set oldest-first
+instead of newest-first.
+
+This fallback only ever runs when `FEATURED_POSTS` is empty. Setting
+it to anything; even a single entry; disables the fallback entirely
+and uses your list as-is.
+
 ## Homepage vs. Posts
 
-The homepage (`/`) is now a preface page: tagline, a "Now" note, a stack
-of skill pills, and "Selected projects" cards built from
-`FEATURED_PROJECTS`. It's driven entirely by settings — no content file
-needed.
+The homepage (`/`) is now a preface page: tagline, a "Now" note,
+preface-project pills, a "Skills" list, and "Featured posts" cards (see
+"Preface projects" and "Featured posts" above). It's driven entirely by
+settings; no content file needed.
 
 Blog posts live at `/posts/` instead, using the same paginated post-card
 list as before (`templates/index.html`). The sidebar's "Home" and
@@ -155,7 +224,8 @@ Pelican defaults (`index.html` / `''`).
 ## Sidebar
 
 - Nav (Home, Posts, plus anything in `MENUITEMS`), a "Pinned" section
-  from `FEATURED_PROJECTS`, and an "Elsewhere" section from `SOCIAL`.
+  (see "Featured posts" above), and an "Elsewhere" section from
+  `SOCIAL`.
 - On screens under 860px it becomes an off-canvas drawer, opened via the
   hamburger button in the top bar and closed via the overlay, Escape, or
   the folder-tab close button attached to the drawer's edge.
@@ -191,7 +261,7 @@ FAVICON = 'favicon.png'   # .ico / .png / .svg all supported
 AVATAR = 'avatar.png'     # shown as a circular photo in the top bar
 ```
 
-The actual files go through Pelican's normal static-file handling —
+The actual files go through Pelican's normal static-file handling;
 they don't ship with the theme, since they're specific to your site:
 
 ```python
@@ -207,7 +277,7 @@ scaled to fill it (`object-fit: cover`), so any aspect ratio works.
 
 ## Extending the theme (analytics, extra scripts, etc.)
 
-`base.html` has two silent extension points — they render nothing
+`base.html` has two silent extension points; they render nothing
 unless your site supplies them:
 
 ```
@@ -222,7 +292,7 @@ without forking or editing the theme itself:
 THEME_TEMPLATES_OVERRIDES = ['theme_overrides']
 ```
 with e.g. `theme_overrides/_includes/extra-body.html` containing
-whatever `<script>` tags you need — analytics, GoatCounter, a
+whatever `<script>` tags you need; analytics, GoatCounter, a
 self-hosted JS library, and so on. No specific analytics service is
 hardcoded into the theme; this is the general mechanism for all of them.
 
@@ -231,7 +301,7 @@ hardcoded into the theme; this is the general mechanism for all of them.
 Pygments' default short class names (`.c`, `.k`, `.s`, `.n`, `.nb`, `.m`,
 `.o`, `.p`, `.err`, etc.) are styled directly in `style.css`, once per
 theme, scoped under `html[data-theme="dark"]` / `html[data-theme="light"]`.
-No separate Pygments stylesheet or `pygmentize` step needed — just make
+No separate Pygments stylesheet or `pygmentize` step needed; just make
 sure `MARKDOWN` or `docutils` is configured to run code blocks through
 Pygments as usual (Pelican does this by default for fenced code blocks).
 
@@ -240,7 +310,7 @@ Pygments as usual (Pelican does this by default for fenced code blocks).
 - Post list and article pages show a category pill and a row of tag pills
   pulled straight from your article metadata (`Category:` / `Tags:` in
   the file header, or the YAML/`#metadata()` equivalent if you're using
-  the pelican-typst reader) — no template changes needed on your end.
+  the pelican-typst reader); no template changes needed on your end.
 
 ## What changed vs. upstream Storm
 

@@ -29,6 +29,20 @@
 {% endif %}
   {% include '_includes/extra-head.html' ignore missing %}
 </head>
+{% set featured_items = FEATURED_POSTS %}
+{% if not featured_items %}
+  {% set featured_items = [] %}
+  {% set recent_articles = (articles|sort(attribute='date', reverse=true))[:DEFAULT_FEATURED_POSTS|default(3)] %}
+  {% set order_ascending = (DEFAULT_FEATURED_POSTS_ORDER|default('desc')|lower) in ['asc', 'ascending'] %}
+  {% for article in recent_articles|sort(attribute='date', reverse=not order_ascending) %}
+    {% set _ = featured_items.append({
+      'name': article.title,
+      'url': article.url,
+      'desc': article.summary|striptags|truncate(140) if article.summary else '',
+      'tags': article.tags|map(attribute='name')|list if article.tags is defined else (),
+    }) %}
+  {% endfor %}
+{% endif %}
 <body>
 <div id="outer-wrapper">
 {% include '_includes/site-header.html' %}

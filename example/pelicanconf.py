@@ -45,6 +45,15 @@ PREFACE_SKILLS = (
     "USB protocols",
 )
 PREFACE_NOW = "Building a DIY item, that is open source, and easy for everyone to use! How awesome"
+PREFACE_LATER = "Writing up how it was built, and what comes next"
+
+PREFACE_PROJECTS = (
+    ("Old Flutter App", "https://github.com/dhitchenor/old-flutter-app"),
+    ("A Python Script", "https://github.com/dhitchenor/a-python-script"),
+    ("Home Server Dashboard", "https://github.com/dhitchenor/home-dashboard"),
+    ("CAN Bus Sniffer", "https://github.com/dhitchenor/can-bus-sniffer"),
+)
+PREFACE_PROJECTS_LINES = 2
 
 DISPLAY_PAGES_ON_MENU = True
 MENUITEMS = (("About", "about/"),)
@@ -58,7 +67,7 @@ SOCIAL = (
 
 COPYRIGHT_YEAR = 2026
 
-FEATURED_PROJECTS = (
+FEATURED_POSTS = (
     {
         "name": "Orbital Mechanics",
         "url": "/orbital-mechanics-quick-look.html",
